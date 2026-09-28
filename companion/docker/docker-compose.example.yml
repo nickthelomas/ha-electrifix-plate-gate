@@ -1,0 +1,18 @@
+# Add this service next to your Frigate service. Mount the SAME folder you mount at Frigate's /config.
+services:
+  plate-gate-companion:
+    build:
+      context: https://github.com/nickthelomas/ha-electrifix-plate-gate.git#main:companion   # or a local checkout: ./companion
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    environment:
+      PG_MQTT_HOST: 192.168.1.10        # your broker
+      PG_MQTT_PORT: "1883"
+      PG_MQTT_USER: ""
+      PG_MQTT_PASS: ""
+      PG_COMPANION_ID: frigate-box      # any short name
+      # PG_ALLOWED_BASES: ""            # extra download sources, comma separated
+    init: true
+    volumes:
+      - /opt/frigate/config:/frigate_config      # <- the folder Frigate has at /config
+      - /opt/frigate/media:/media/frigate:ro     # <- the folder Frigate has at /media/frigate (for the accuracy benchmark)

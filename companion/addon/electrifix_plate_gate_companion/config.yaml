@@ -1,0 +1,60 @@
+# The ElectriFix Plate Gate Companion.
+#
+# Plate Gate (the Home Assistant integration) can write Frigate's settings, but it cannot put a
+# file on the machine Frigate runs on. This add-on runs next to Frigate with write access to
+# Frigate's config folder and does exactly two kinds of job on Plate Gate's behalf:
+#   1. put a detection-model file into  <frigate config>/model_cache/plate_gate/  (and list or
+#      remove files in that one folder), downloading only from ElectriFix's release page (or a
+#      source you add to `allowed_bases`), checksum-verified;
+#   2. report what the machine really has (CPU, RAM, a Coral on USB or M.2, Hailo, MemryX);
+#   3. when asked, run candidate models over Frigate's recent event snapshots (read-only) and report
+#      how many frames each one found a vehicle in — a comparison on YOUR scene, not ground truth.
+# It talks to Plate Gate over the MQTT broker Frigate already uses. Nothing else.
+#
+# WHAT THIS ADD-ON IS NOT ALLOWED TO DO, and why each line matters:
+#   host_network: false   -- its own network namespace; it cannot see your LAN.
+#   no ports, ingress: false  -- nothing is opened on your network and there is no panel.
+#   no hassio_api / homeassistant_api -- it never talks to the Supervisor or to Home Assistant.
+#   map: all_addon_configs:rw -- the ONE write permission it needs: the Frigate add-on's config
+#                            folder. It only ever writes inside model_cache/plate_gate/.
+#   map: media:ro         -- read-only, to look at Frigate's event snapshots for the benchmark.
+#   services: mqtt:want   -- it borrows the MQTT add-on's login so you don't have to type one.
+#   no privileged, no devices -- reading /sys to spot a Coral needs no special access.
+# You can read this file before installing. It should stand up to that.
+name: ElectriFix Plate Gate Companion
+version: "0.2.0"
+slug: electrifix_plate_gate_companion
+description: >-
+  Puts detection-model files next to Frigate for ElectriFix Plate Gate and reports what your
+  machine really has. Talks to Plate Gate over your MQTT broker. Nothing else.
+url: https://github.com/nickthelomas/ha-electrifix-plate-gate
+arch:
+  - aarch64
+  - amd64
+init: false
+host_network: false
+ingress: false
+privileged: []
+startup: services
+boot: auto
+map:
+  - all_addon_configs:rw
+  - media:ro
+services:
+  - mqtt:want
+options:
+  frigate_config_dir: /addon_configs/ccab4aaf_frigate
+  frigate_media_dir: /media/frigate
+  mqtt_host: ""
+  mqtt_port: 1883
+  mqtt_user: ""
+  mqtt_password: ""
+  allowed_bases: ""
+schema:
+  frigate_config_dir: str
+  frigate_media_dir: str
+  mqtt_host: str?
+  mqtt_port: port?
+  mqtt_user: str?
+  mqtt_password: password?
+  allowed_bases: str?

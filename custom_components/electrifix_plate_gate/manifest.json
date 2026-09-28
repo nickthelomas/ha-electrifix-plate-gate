@@ -1,0 +1,14 @@
+{
+  "domain": "electrifix_plate_gate",
+  "name": "ElectriFix Plate Gate",
+  "after_dependencies": ["frigate"],
+  "codeowners": ["@nickthelomas"],
+  "config_flow": true,
+  "dependencies": ["mqtt"],
+  "documentation": "https://github.com/nickthelomas/ha-electrifix-plate-gate",
+  "integration_type": "device",
+  "iot_class": "local_push",
+  "issue_tracker": "https://github.com/nickthelomas/ha-electrifix-plate-gate/issues",
+  "requirements": ["ruamel.yaml>=0.18,<0.19"],
+  "version": "0.4.0"
+}

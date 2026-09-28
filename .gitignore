@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.superpowers/
+sandbox/.token
+sandbox/ha-config/*
+!sandbox/ha-config/configuration.yaml
+models-dist/*.onnx
+companion/.venv/
+sandbox/media/frigate/clips/*.jpg
+sandbox/media/frigate/clips/*.webp

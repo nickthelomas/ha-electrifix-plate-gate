@@ -1,0 +1,263 @@
+{
+  "title": "ElectriFix Plate Gate",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Frigate",
+        "description": "Plate Gate uses Frigate's built-in plate reader. Enter the address you open Frigate at. Port 5000 needs no login; port 8971 does.",
+        "data": {
+          "url": "Frigate address",
+          "username": "Username (port 8971 only)",
+          "password": "Password (port 8971 only)"
+        }
+      },
+      "camera": {
+        "title": "Which camera sees the plates?",
+        "description": "Frigate found these cameras. The camera must already be working in Frigate (Plate Gate never changes how a camera is pulled in).\n\n{cameras}\n\n{version_note}",
+        "data": {
+          "camera": "Camera"
+        }
+      },
+      "plates": {
+        "title": "People and plates",
+        "description": "One line per person: **Name: PLATE, PLATE**. Spaces, dots and dashes don't matter.\n\nUnder *Near misses*, list plates that are similar to yours (a neighbour's car, a regular visitor) and Plate Gate will check they can't open the door.\n\n{verdicts}\n\n{detail}",
+        "data": {
+          "people_text": "People and plates",
+          "near_misses": "Near misses to check (comma separated)",
+          "match_distance": "Match distance (0 = exact, tolerant of O/0 and spacing; 1–2 = also accept that many wrong characters)",
+          "confirmed": "I've read the check above and it looks right"
+        }
+      },
+      "device": {
+        "title": "What should open",
+        "description": "Pick the garage door, gate, switch, script or lock.\n\n**Repeat protection** decides when the same car may move the door again. Each choice has a risk; you choose:\n\n• **Cooldown only** (recommended): nothing moves within the cooldown of the door last moving. *Risk:* a car parked in view for longer than the cooldown, still tracked by Frigate, can trigger the door again.\n\n• **Cooldown + once per Frigate event**: as above, and the same Frigate tracking event can only act once. *Risk:* Frigate can start a NEW event for the same car (a bad frame, someone walking in front of the camera, the car leaving view and coming back, pulling forward to fetch something and reversing again), and a new event may trigger the door again once the cooldown allows.\n\n**Only while moving** (off by default): ignore cars Frigate marks as stationary. *Risk:* a car that stops before its plate is read is missed, and a slow arrival can be marked stationary.\n\n**Locks:** unlocking a door for a number plate is a bigger step than opening a garage. A photo of your plate, or a similar plate, could unlock it. You must tick the disclaimer to use a lock, and you accept that ElectriFix and this software carry no responsibility for entry gained this way.",
+        "data": {
+          "device_entity": "Device",
+          "open_on_arrival": "Open when a known plate arrives (door closed → open)",
+          "close_on_leaving": "Close when a known plate leaves (door open → close)",
+          "cooldown_seconds": "Cooldown after the door last moved",
+          "require_moving": "Only act while the car is moving (ignore parked cars)",
+          "auto_close_minutes": "Close (or re-lock) again after this many minutes if Plate Gate opened it (0 = off)",
+          "zones": "Frigate zones (optional)",
+          "repeat_mode": "Repeat protection",
+          "lock_acknowledged": "Lock disclaimer: I understand a plate read can unlock my door and I accept the risk"
+        }
+      },
+      "frigate_yaml": {
+        "title": "Tell Frigate about the plates",
+        "description": "Plate Gate is set up. Now paste this into your Frigate `config.yml` at the top level and restart Frigate (restarting pauses detection for about a minute):\n\n```yaml\n{yaml}\n```\n\nTips for **{camera}**:\n\n• Set `detect` to the camera's real stream size. It is currently {detect}. Plates are small; every pixel counts.\n\n• Don't mask the street. Tracking a car as it turns in gives the plate reader a head start.\n\n• Plate Gate starts in **dry run**: it logs what it *would* do. Turn dry run off once the *Last action* sensor looks right for a few days.\n\nStuck? ElectriFix can set this up for you: https://fix.electrifixperth.com.au"
+      }
+    },
+    "error": {
+      "cannot_connect": "Couldn't reach Frigate at that address.",
+      "auth_required": "Frigate wants a username and password (port 8971). Add them, or use the unauthenticated port 5000.",
+      "no_cameras": "Frigate answered, but has no cameras configured.",
+      "bad_plates": "Couldn't understand the plates ({detail}). Use one line per person: Name: PLATE, PLATE",
+      "confirm_verdicts": "Check the patterns and near-miss results below, then tick the box to continue.",
+      "lock_ack_required": "To use a lock you must tick the disclaimer box."
+    },
+    "abort": {
+      "mqtt_required": "Set up the MQTT integration first (Frigate needs it too), then add Plate Gate.",
+      "already_configured": "This camera already has a Plate Gate."
+    }
+  },
+  "options": {
+    "step": {
+      "plates": {
+        "title": "People and plates",
+        "description": "One line per person: **Name: PLATE, PLATE**. Spaces, dots and dashes don't matter.\n\nUnder *Near misses*, list plates that are similar to yours (a neighbour's car, a regular visitor) and Plate Gate will check they can't open the door.\n\n{verdicts}\n\n{detail}",
+        "data": {
+          "people_text": "People and plates",
+          "near_misses": "Near misses to check (comma separated)",
+          "match_distance": "Match distance (0 = exact, tolerant of O/0 and spacing; 1–2 = also accept that many wrong characters)",
+          "confirmed": "I've read the check above and it looks right"
+        }
+      },
+      "device": {
+        "title": "What should open",
+        "description": "Pick the garage door, gate, switch, script or lock.\n\n**Repeat protection** decides when the same car may move the door again. Each choice has a risk; you choose:\n\n• **Cooldown only** (recommended): nothing moves within the cooldown of the door last moving. *Risk:* a car parked in view for longer than the cooldown, still tracked by Frigate, can trigger the door again.\n\n• **Cooldown + once per Frigate event**: as above, and the same Frigate tracking event can only act once. *Risk:* Frigate can start a NEW event for the same car (a bad frame, someone walking in front of the camera, the car leaving view and coming back, pulling forward to fetch something and reversing again), and a new event may trigger the door again once the cooldown allows.\n\n**Only while moving** (off by default): ignore cars Frigate marks as stationary. *Risk:* a car that stops before its plate is read is missed, and a slow arrival can be marked stationary.\n\n**Locks:** unlocking a door for a number plate is a bigger step than opening a garage. A photo of your plate, or a similar plate, could unlock it. You must tick the disclaimer to use a lock, and you accept that ElectriFix and this software carry no responsibility for entry gained this way.",
+        "data": {
+          "device_entity": "Device",
+          "open_on_arrival": "Open when a known plate arrives (door closed → open)",
+          "close_on_leaving": "Close when a known plate leaves (door open → close)",
+          "cooldown_seconds": "Cooldown after the door last moved",
+          "require_moving": "Only act while the car is moving (ignore parked cars)",
+          "auto_close_minutes": "Close (or re-lock) again after this many minutes if Plate Gate opened it (0 = off)",
+          "zones": "Frigate zones (optional)",
+          "repeat_mode": "Repeat protection",
+          "lock_acknowledged": "Lock disclaimer: I understand a plate read can unlock my door and I accept the risk"
+        }
+      },
+      "frigate_yaml": {
+        "title": "Tell Frigate about the plates",
+        "description": "Saved. If you changed plates, update Frigate too:\n\n```yaml\n{yaml}\n```\n\nCamera **{camera}**, detect size {detect}."
+      },
+      "init": {
+        "title": "ElectriFix Plate Gate",
+        "menu_options": {
+          "plates": "People, plates and the door",
+          "frigate_write": "Write the plate-reader settings into Frigate",
+          "frigate_restore": "Restore a previous Frigate config",
+          "hardware": "Hardware check and model recommendation",
+          "benchmark": "Benchmark detection models",
+          "install_model": "Install a detection model (needs the Companion)",
+          "accuracy": "Accuracy check on your own footage (needs the Companion)"
+        }
+      },
+      "frigate_write": {
+        "title": "Write to Frigate",
+        "description": "Plate Gate will back up Frigate's `config.yml`, apply the change below, restart Frigate once, and check that **{camera}** comes back with the plate reader on. If it doesn't within two minutes, the previous config is put back automatically.\n\n⚠️ **Restarting Frigate pauses detection for about 30–60 seconds.** Don't do this while someone is on their way home.\n\n**What changes:**\n\n{summary}\n\n{warnings}\n\n{diff}",
+        "data": {
+          "detect_native": "Let Frigate detect at the camera's native resolution (removes the detect width/height)",
+          "debug_save_plates": "Save plate crops for diagnosis (uses disk; turn off later)",
+          "confirm": "I've read the change above. Back up, apply and restart Frigate now."
+        }
+      },
+      "frigate_write_done": {
+        "title": "Result",
+        "description": "{result}\n\nBackup of the previous config: `{backup}`"
+      },
+      "frigate_restore": {
+        "title": "Restore a previous Frigate config",
+        "description": "Pick a backup. Frigate will restart with it (detection pauses ~30–60 s).",
+        "data": {
+          "backup": "Backup",
+          "confirm": "Restore this config and restart Frigate now"
+        }
+      },
+      "frigate_restore_done": {
+        "title": "Result",
+        "description": "{result}"
+      },
+      "hardware": {
+        "title": "Hardware and models",
+        "description": "What your Frigate machine is doing right now, and what Plate Gate would run on it.\n\n{report}\n\nModel files are GPL-3.0 conversions of the YOLOv9 authors' weights; the licence note and sources are in the README."
+      },
+      "benchmark": {
+        "title": "Benchmark detection models",
+        "description": "Plate Gate switches Frigate to each candidate in turn, lets it run on your live cameras for the minutes you choose, records speed and skipped frames, then puts your original config back.\n\n⚠️ **Each candidate is one Frigate restart** (detection pauses ~30–60 s each time). The model files must already be on the Frigate machine; the hardware screen gives the install command. A candidate whose file is missing simply fails and is skipped.{report}",
+        "data": {
+          "candidates": "Candidates",
+          "minutes": "Minutes per candidate",
+          "ack": "I understand Frigate will restart once per candidate and the files must already be in place"
+        }
+      },
+      "benchmark_done": {
+        "title": "Benchmark results",
+        "description": "{table}"
+      },
+      "install_model": {
+        "title": "Install a detection model",
+        "description": "The Companion **{companion}** will download the file from {source}, check its checksum and put it where Frigate reads models. Nothing in Frigate changes until you write the settings (Configure → Write) or run the benchmark.\n\nThese files are GPL-3.0 conversions of the YOLOv9 authors' released weights; licence and sources are in the README.",
+        "data": {
+          "model": "Model",
+          "source": "Download from (advanced: leave as is unless you host the files yourself; the Companion only accepts sources on its allow-list)"
+        }
+      },
+      "install_model_done": {
+        "title": "Result",
+        "description": "{result}"
+      },
+      "accuracy": {
+        "title": "Accuracy check on your own footage",
+        "description": "The Companion **{companion}** runs each model you tick over the most recent event snapshots of **{camera}** and counts the frames where it found a vehicle. Runs on the Frigate machine's CPU for a few minutes; Frigate keeps working.\n\n{note}",
+        "data": {
+          "models": "Models to compare (installed on the Frigate machine)",
+          "max_images": "How many recent snapshots",
+          "ack": "I understand this is a comparison on my own footage, not a guarantee"
+        }
+      },
+      "accuracy_done": {
+        "title": "Accuracy results",
+        "description": "{table}"
+      }
+    },
+    "error": {
+      "cannot_connect": "Couldn't reach Frigate at that address.",
+      "auth_required": "Frigate wants a username and password (port 8971). Add them, or use the unauthenticated port 5000.",
+      "no_cameras": "Frigate answered, but has no cameras configured.",
+      "bad_plates": "Couldn't understand the plates ({detail}). Use one line per person: Name: PLATE, PLATE",
+      "confirm_verdicts": "Check the patterns and near-miss results below, then tick the box to continue.",
+      "lock_ack_required": "To use a lock you must tick the disclaimer box.",
+      "confirm_required": "Tick the box to confirm, or go back.",
+      "pick_one": "Pick at least one candidate.",
+      "nothing_to_change": "Frigate already has these settings. Change an option above, or go back."
+    },
+    "progress": {
+      "applying": "Backing up, applying and restarting Frigate. This takes about a minute. Don't close this window.",
+      "restoring": "Restoring the previous config and restarting Frigate. About a minute.",
+      "benchmarking": "Benchmarking. Each candidate takes a restart plus the minutes you chose. Don't close this window.",
+      "installing": "The Companion is downloading and checking the file. Progress shows on the Frigate status sensor.",
+      "accuracy": "The Companion is running the models over your snapshots. Progress shows on the Frigate status sensor."
+    },
+    "abort": {
+      "busy": "Another Frigate operation (a write, restore or benchmark) is still running. Try again in a minute.",
+      "admin_required": "Frigate's config routes need its admin login. Reconfigure Plate Gate with the Frigate admin username and password (port 8971), or use the unauthenticated port 5000.",
+      "auth_required": "Frigate wants a login. Reconfigure Plate Gate with the Frigate username and password.",
+      "cannot_connect": "Couldn't reach Frigate.",
+      "bad_yaml": "Frigate's config.yml could not be read as YAML, so Plate Gate won't touch it. Fix it in Frigate's config editor first.",
+      "nothing_to_change": "Frigate already has these settings. Nothing to write.",
+      "no_backups": "No backups yet: Plate Gate hasn't written to this Frigate.",
+      "not_loaded": "Plate Gate isn't running. Reload it and try again.",
+      "no_companion": "No Plate Gate Companion is online. Install it next to Frigate (Home Assistant OS: the add-on from the ElectriFix add-on repository; Docker: the companion container), then try again. Without it, the hardware screen gives you a one-line command to run yourself.",
+      "no_models": "The Companion has no model files yet. Use Install model first."
+    }
+  },
+  "entity": {
+    "switch": {
+      "enabled": {
+        "name": "Enabled"
+      },
+      "dry_run": {
+        "name": "Dry run"
+      }
+    },
+    "sensor": {
+      "last_plate": {
+        "name": "Last plate"
+      },
+      "last_action": {
+        "name": "Last action"
+      },
+      "timing": {
+        "name": "Timing"
+      },
+      "frigate_status": {
+        "name": "Frigate status"
+      },
+      "hardware": {
+        "name": "Hardware"
+      },
+      "benchmark": {
+        "name": "Benchmark"
+      },
+      "companion": {
+        "name": "Companion"
+      },
+      "accuracy": {
+        "name": "Accuracy"
+      }
+    },
+    "number": {
+      "cooldown": {
+        "name": "Cooldown"
+      }
+    },
+    "button": {
+      "test_match": {
+        "name": "Test a plate"
+      },
+      "restore_frigate": {
+        "name": "Restore Frigate"
+      }
+    }
+  },
+  "selector": {
+    "repeat_mode": {
+      "options": {
+        "cooldown": "Cooldown only (recommended)",
+        "cooldown_and_event": "Cooldown + once per Frigate event"
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+pytest-homeassistant-custom-component==0.13.205
+ruamel.yaml>=0.18,<0.19
