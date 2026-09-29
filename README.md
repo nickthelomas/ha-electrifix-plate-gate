@@ -265,9 +265,21 @@ off, nothing moves.
 
 ## Typical timings
 
-On a Ryzen 7 mini PC running Frigate's YOLOv9 model on the CPU, arrivals take about
-5 seconds from first sight to the door moving, and exits 8 to 12 seconds (the plate is on
-the back of the car, which the camera sees later). The *Timing* sensor tells you yours.
+Measured on the developer's own driveway (Ryzen 7 mini PC, Frigate's YOLOv9-m at 640 on the CPU,
+2304×1296 detection), from the car first being detected to the door starting to move:
+
+| | Measured trips | First sight → door moving |
+|---|---|---|
+| Arrivals | 2 | 3.9 s and 5.2 s |
+| Exits | 2 | 6.7 s and 10.6 s |
+
+In every trip the plate was read within 0.4 to 2.8 s of the door being told to move. Almost all of
+the wait is Frigate recognising the object as a car in the first place. Exits are slower not because
+of which plate is visible (a car that drives in nose-first shows its front plate both ways) but
+because a car emerging from a garage is close, partly hidden and oddly framed, so it takes longer to
+be classified as a car; where the camera sits decides how long. Small sample; the *Timing* sensor
+gives you your own numbers, and its attributes split the wait into car seen → plate read → action →
+door moving so you can see which part is slow.
 
 ## Roadmap
 
