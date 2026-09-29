@@ -45,6 +45,7 @@ from .const import (
     DEVICE_DOMAINS,
     DOMAIN,
     EXAMPLE_NEAR_MISSES,
+    HELP_URL,
     REPEAT_MODES,
 )
 from . import backups
@@ -151,6 +152,7 @@ def _yaml_placeholders(people_text: str, camera: str, detect: str) -> dict[str, 
         "yaml": frigate_lpr_yaml(parse_people(people_text)),
         "camera": camera,
         "detect": detect,
+        "help_url": HELP_URL,  # hassfest: URLs go in placeholders, never in the translation text
     }
 
 

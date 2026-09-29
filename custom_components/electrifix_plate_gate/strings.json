@@ -45,7 +45,7 @@
       },
       "frigate_yaml": {
         "title": "Tell Frigate about the plates",
-        "description": "Plate Gate is set up. Now paste this into your Frigate `config.yml` at the top level and restart Frigate (restarting pauses detection for about a minute):\n\n```yaml\n{yaml}\n```\n\nTips for **{camera}**:\n\n• Set `detect` to the camera's real stream size. It is currently {detect}. Plates are small; every pixel counts.\n\n• Don't mask the street. Tracking a car as it turns in gives the plate reader a head start.\n\n• Plate Gate starts in **dry run**: it logs what it *would* do. Turn dry run off once the *Last action* sensor looks right for a few days.\n\nStuck? ElectriFix can set this up for you: https://fix.electrifixperth.com.au"
+        "description": "Plate Gate is set up. Now paste this into your Frigate `config.yml` at the top level and restart Frigate (restarting pauses detection for about a minute):\n\n```yaml\n{yaml}\n```\n\nTips for **{camera}**:\n\n• Set `detect` to the camera's real stream size. It is currently {detect}. Plates are small; every pixel counts.\n\n• Don't mask the street. Tracking a car as it turns in gives the plate reader a head start.\n\n• Plate Gate starts in **dry run**: it logs what it *would* do. Turn dry run off once the *Last action* sensor looks right for a few days.\n\nStuck? ElectriFix can set this up for you: {help_url}"
       }
     },
     "error": {
