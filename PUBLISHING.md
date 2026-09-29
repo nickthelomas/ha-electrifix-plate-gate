@@ -7,9 +7,9 @@ Three things go public, in this order. Scripts do the staging and refuse to ship
 ```bash
 tools/publish_integration.sh /tmp/publish/ha-electrifix-plate-gate    # filtered copy, scanned
 cd /tmp/publish/ha-electrifix-plate-gate
-git init -b main && git add -A && git commit -m "ElectriFix Plate Gate 0.4.0"
+git init -b main && git add -A && git commit -m "ElectriFix Plate Gate 0.4.1"
 git remote add origin https://github.com/nickthelomas/ha-electrifix-plate-gate.git
-git push -u origin main && git tag v0.4.0 && git push origin v0.4.0
+git push -u origin main && git tag v0.4.1 && git push origin v0.4.1
 ```
 Create the empty repository on GitHub first (public, no README). **Never force-push `main` later**: HACS
 downloads the default-branch HEAD zip and a replaced commit 404s in-flight installs. Bump
