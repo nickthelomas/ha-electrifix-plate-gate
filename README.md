@@ -2,6 +2,8 @@
 
 # ElectriFix Plate Gate
 
+<p align="center"><a href="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/hassfest.yml"><img src="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/hassfest.yml/badge.svg" alt="Hassfest"></a> <a href="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/hacs.yml"><img src="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/hacs.yml/badge.svg" alt="HACS"></a> <a href="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/tests.yml"><img src="https://github.com/nickthelomas/ha-electrifix-plate-gate/actions/workflows/tests.yml/badge.svg" alt="Tests"></a></p>
+
 Your garage or gate opens for your car's number plate, using the plate reader that is
 already built into [Frigate](https://frigate.video). No cloud, no subscription, no
 trial and error.
