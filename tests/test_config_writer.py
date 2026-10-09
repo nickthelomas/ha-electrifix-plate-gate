@@ -58,7 +58,7 @@ cameras:
       fps: 5
 """
 
-PEOPLE = parse_people("Bonnie: NO860")
+PEOPLE = parse_people("Alex: XO520")
 M640 = w.ModelChoice(
     key="yolov9-m-640", family="yolov9", size="m", imgsz=640, filename="yolov9-m-640.onnx",
     url="https://example.invalid/yolov9-m-640.onnx", sha256=None, licence="GPL-3.0",
@@ -76,7 +76,7 @@ def test_lpr_block_added_and_other_people_kept():
     new = w.load_yaml(ch.new_yaml)
     assert new["lpr"]["enabled"] is True
     assert new["lpr"]["match_distance"] == 0
-    assert new["lpr"]["known_plates"]["Bonnie"] == [variant_pattern("NO860")]
+    assert new["lpr"]["known_plates"]["Alex"] == [variant_pattern("XO520")]
     assert new["lpr"]["known_plates"]["Neighbour"] == ["ABC123"]
     assert "debug_save_plates" not in new["lpr"]
     assert "+  enabled: true" in ch.diff and "-  enabled: false" in ch.diff

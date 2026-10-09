@@ -35,7 +35,7 @@ def make_ops(hass, aioclient_mock, fake: FakeFrigate, notified: list):
 
 
 def change_for(raw: str):
-    return plan_change(raw, Desired(people=parse_people("Bonnie: NO860"), camera="driveway", detect_native=True))
+    return plan_change(raw, Desired(people=parse_people("Alex: XO520"), camera="driveway", detect_native=True))
 
 
 async def test_apply_success_backs_up_saves_and_verifies(hass, aioclient_mock, cfg):
@@ -106,7 +106,7 @@ async def test_noop_change_is_refused_without_touching_frigate(hass, aioclient_m
     fake, notified = FakeFrigate(RAW), []
     ops = make_ops(hass, aioclient_mock, fake, notified)
     ch = change_for(RAW)
-    noop = plan_change(ch.new_yaml, Desired(people=parse_people("Bonnie: NO860"), camera="driveway", detect_native=True))
+    noop = plan_change(ch.new_yaml, Desired(people=parse_people("Alex: XO520"), camera="driveway", detect_native=True))
     result = await ops.async_apply(noop, timeout=1.0)
     assert not result.ok and result.stage == "noop" and fake.saves == []
 
@@ -192,7 +192,7 @@ async def test_restore_latest_skips_backups_identical_to_current(hass, aioclient
     fake.on_save = lambda body: setattr(fake, "stay_down", "debug_save_plates" in body)
     from custom_components.electrifix_plate_gate.config_writer import Desired, plan_change
     from custom_components.electrifix_plate_gate.plates import parse_people
-    second = await ops.async_apply(plan_change(written, Desired(people=parse_people("Bonnie: NO860"), camera="driveway", debug_save_plates=True)), timeout=0.05)
+    second = await ops.async_apply(plan_change(written, Desired(people=parse_people("Alex: XO520"), camera="driveway", debug_save_plates=True)), timeout=0.05)
     assert second.rolled_back and fake.raw == written                     # backup #2 = written (== current)
     fake.on_save = None
     result = await ops.async_restore_latest()

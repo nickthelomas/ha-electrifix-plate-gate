@@ -66,7 +66,7 @@ Go to **Settings → Devices & Services → Add Integration** and search for
 |---|---|
 | **1. Connect to Frigate** | The address you open Frigate at. Port 5000 needs no login; port 8971 wants the Frigate username and password. If you already have the Frigate integration, the address is filled in for you. |
 | **2. Camera** | Pick the camera that sees the plates. The screen shows each camera's detection size. |
-| **3. People and plates** | One line per person: `Bonnie: NO860, 1ABC123`. Spaces, dots and dashes don't matter. Under *Near misses*, list similar plates (a neighbour's car, the regular Uber) and Plate Gate checks they **can't** open the door. It shows you the patterns and the verdicts, and you tick a box to say you've read them. |
+| **3. People and plates** | One line per person: `Alex: XO520, 1ABC123`. Spaces, dots and dashes don't matter. Under *Near misses*, list similar plates (a neighbour's car, the regular Uber) and Plate Gate checks they **can't** open the door. It shows you the patterns and the verdicts, and you tick a box to say you've read them. |
 | **4. What should open** | The door, and how: open on arrival, close on leaving, or both. Cooldown (default 3 minutes), "only while the car is moving", auto-close, and an optional zone filter. |
 | **5. Frigate settings** | The `lpr:` block for Frigate's `config.yml`, plus two tips for your camera. You can paste it yourself, or let Plate Gate write it (next section). |
 
@@ -176,7 +176,7 @@ One device per camera, named *Plate Gate: &lt;camera&gt;*, with:
 |---|---|
 | **Enabled** (switch) | Master on/off. |
 | **Dry run** (switch) | On by default. While on, nothing moves; the sensors still update. |
-| **Last plate** (sensor) | The last plate read on this camera, normalised (`NO860`). Attributes: the raw read (`NO ·860`), who it matched, the pattern, Frigate's confidence, the event id. |
+| **Last plate** (sensor) | The last plate read on this camera, normalised (`XO520`). Attributes: the raw read (`XO ·520`), who it matched, the pattern, Frigate's confidence, the event id. |
 | **Last action** (sensor) | `open`, `close`, `trigger`, `would_open`/`would_close` (dry run), `skipped`, or `error`. The `reason` attribute explains a skip: `cooldown`, `device_busy`, `no_match`, `no_transition`, `stationary`, `outside_zone`. |
 | **Timing** (sensor) | Seconds from the car first being seen to the action. Attributes break it down: car seen → plate read → action → door moving. |
 | **Cooldown** (number) | Seconds since the door last moved before Plate Gate will move it again. |
@@ -190,22 +190,22 @@ One device per camera, named *Plate Gate: &lt;camera&gt;*, with:
 
 ## How the matching works
 
-Frigate's plate reader often returns plates with spaces and dots in them, like `NO ·860`,
+Frigate's plate reader often returns plates with spaces and dots in them, like `XO ·520`,
 and sometimes swaps look-alike characters (O and 0, I and 1, B and 8, S and 5, G and 6,
 Z and 2). A plain text comparison misses perfectly good reads.
 
 Plate Gate normalises every read (upper case, separators removed) and matches it against a
-tolerant pattern built from your plate. `NO860` becomes:
+tolerant pattern built from your plate. `XO520` becomes:
 
 ```
-N[ .·•\-]*[O0][ .·•\-]*[8B][ .·•\-]*[6G][ .·•\-]*[0O]
+X[ .·•\-]*[O0][ .·•\-]*[5S][ .·•\-]*[2Z][ .·•\-]*[0O]
 ```
 
 That is also what goes into Frigate's `known_plates`, because Frigate matches the raw
 read with a regular expression and does no normalising of its own.
 
 **Match distance** (default 0) lets you accept reads that are one or two characters wrong
-as well. Be careful with it: with distance 1, `NO840` opens the door for `NO860`. That is
+as well. Be careful with it: with distance 1, `XO540` opens the door for `XO520`. That is
 exactly what the near-miss check on screen 3 is for. The Frigate block always uses
 `match_distance: 0`, because Plate Gate does the tolerant matching itself and Frigate's
 own distance check does not work with patterns.

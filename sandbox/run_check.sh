@@ -59,8 +59,8 @@ if ! curl -fsS "$HA/api/config/config_entries/entry" "${AUTH[@]}" | grep -qE '"d
   R=$(flow electrifix_plate_gate \
     '{"url":"http://frigate:5000"}' \
     '{"camera":"driveway"}' \
-    '{"people_text":"Bonnie: NO860","near_misses":"LO160, NO840","match_distance":0,"confirmed":false}' \
-    '{"people_text":"Bonnie: NO860","near_misses":"LO160, NO840","match_distance":0,"confirmed":true}' \
+    '{"people_text":"Alex: XO520","near_misses":"LO120, XO540","match_distance":0,"confirmed":false}' \
+    '{"people_text":"Alex: XO520","near_misses":"LO120, XO540","match_distance":0,"confirmed":true}' \
     '{"device_entity":"cover.sandbox_garage","open_on_arrival":true,"close_on_leaving":true,"cooldown_seconds":180,"require_moving":false,"auto_close_minutes":5,"zones":[]}' \
     '{}')
   echo "$R" | jget "['type'], d.get('title')"
@@ -77,7 +77,7 @@ curl -fsS -X POST "$HA/api/services/switch/turn_on" "${AUTH[@]}" -d '{"entity_id
 curl -fsS -X POST "$HA/api/services/cover/close_cover" "${AUTH[@]}" -d '{"entity_id":"cover.sandbox_garage"}' >/dev/null
 curl -fsS -X POST "$HA/api/services/number/set_value" "${AUTH[@]}" -d '{"entity_id":"number.plate_gate_driveway_cooldown","value":0}' >/dev/null; sleep 2
 
-say "1) dry run ON: publish NO ·860"; pub
+say "1) dry run ON: publish XO ·520"; pub
 echo "last_plate=$(state sensor.plate_gate_driveway_last_plate) last_action=$(state sensor.plate_gate_driveway_last_action) garage=$(state cover.sandbox_garage) timing=$(state sensor.plate_gate_driveway_timing)"
 [ "$(state sensor.plate_gate_driveway_last_action)" = would_open ] || { echo "FAIL expected would_open"; exit 1; }
 

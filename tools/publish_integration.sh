@@ -24,5 +24,10 @@ rsync -a --delete --delete-excluded --include='/sandbox/ha-config/configuration.
 bad=$(grep -rniE "\bnick\b|192\.168\.|100\.[0-9]+\.[0-9]+\.[0-9]+|Bearer [A-Za-z0-9]|github_pat_|ghp_|@Password|/home/nick" "$target" \
       --exclude-dir=.git --exclude=publish_integration.sh --exclude=publish.sh \
       | grep -vE "nickthelomas|192\.168\.1\.10 +# your broker|192\.168\.50\.40:554/stream1|192\.168\.50\.40/x|192\.168\.50\.40\"|192\.168\.50\.112 +# the HA box|sandbox-pw-123" || true)
+# Household names/plates live in a private, never-published file (one regex per line). Missing = refuse.
+terms="$root/.publish-private-terms"
+if [ ! -s "$terms" ]; then echo "REFUSING to publish: $terms is missing or empty"; exit 1; fi
+bad2=$(grep -rniE -f <(grep -v '^#' "$terms" | grep -v '^$') "$target" --exclude-dir=.git || true)
+if [ -n "$bad2" ]; then bad="${bad:+$bad$'\n'}$bad2"; fi
 if [ -n "$bad" ]; then echo "REFUSING to publish, private details found:"; echo "$bad"; exit 1; fi
 echo "staged public copy in $target ($(find "$target" -type f | wc -l) files)"

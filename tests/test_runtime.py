@@ -17,13 +17,13 @@ from custom_components.electrifix_plate_gate.const import DOMAIN
 
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 5, "zones": [], "enabled": True, "dry_run": False,
 }
 
 
-def payload(plate="NO ·860", **kw):
+def payload(plate="XO ·520", **kw):
     after = {
         "id": "e1", "camera": "driveway", "label": "car", "sub_label": None,
         "recognized_license_plate": plate, "recognized_license_plate_score": 0.95,
@@ -55,8 +55,8 @@ async def test_opens_on_plate_and_records_timing(hass, setup):
     await hass.async_block_till_done()
     assert len(opens) == 1 and opens[0].data["entity_id"] == "cover.garage"
     rt = hass.data[DOMAIN][setup.entry_id]
-    assert rt.last_plate["plate"] == "NO860" and rt.last_plate["person"] == "Bonnie"
-    assert rt.last_plate["raw"] == "NO ·860" and rt.last_plate["event_id"] == "e1"
+    assert rt.last_plate["plate"] == "XO520" and rt.last_plate["person"] == "Alex"
+    assert rt.last_plate["raw"] == "XO ·520" and rt.last_plate["event_id"] == "e1"
     assert rt.last_action["state"] == "open" and rt.last_action["reason"] == "go"
     assert rt.timing["total"] >= 3.0 and rt.timing["device_moved_at"] is None
     hass.states.async_set("cover.garage", "opening")
@@ -156,7 +156,7 @@ async def test_test_match_never_actuates(hass, setup):
     rt = hass.data[DOMAIN][setup.entry_id]
     d = await rt.async_test_match()
     assert d.action == "open" and d.dry_run and opens == []
-    assert rt.last_action["state"] == "would_open" and rt.last_plate["plate"] == "NO860"
+    assert rt.last_action["state"] == "would_open" and rt.last_plate["plate"] == "XO520"
     assert rt.last_action["event_id"].startswith("test-")
 
 
@@ -176,7 +176,7 @@ async def test_setters_persist_to_options_without_reload(hass, setup):
 
 async def test_other_option_change_reloads(hass, setup):
     rt = hass.data[DOMAIN][setup.entry_id]
-    hass.config_entries.async_update_entry(setup, options={**setup.options, "cooldown_seconds": 10, "people_text": "Sam: LO160"})
+    hass.config_entries.async_update_entry(setup, options={**setup.options, "cooldown_seconds": 10, "people_text": "Sam: LO120"})
     await hass.async_block_till_done()
     assert hass.data[DOMAIN][setup.entry_id] is not rt
     assert hass.data[DOMAIN][setup.entry_id].settings().people[0].name == "Sam"

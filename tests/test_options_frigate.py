@@ -15,7 +15,7 @@ RAW = (
 )
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 5, "zones": [], "enabled": True, "dry_run": True,
 }
@@ -55,7 +55,7 @@ async def test_write_shows_diff_requires_confirm_then_applies(hass, env):
     r = await _menu(hass, entry, "frigate_write")
     assert r["type"] == FlowResultType.FORM and r["step_id"] == "frigate_write"
     ph = r["description_placeholders"]
-    assert "+  enabled: true" in ph["diff"] and "Known plates for Bonnie" in ph["summary"]
+    assert "+  enabled: true" in ph["diff"] and "Known plates for Alex" in ph["summary"]
     assert "native" in ph["summary"]  # detect_native defaults on: the camera has an explicit size
     r = await hass.config_entries.options.async_configure(r["flow_id"], {"detect_native": True, "debug_save_plates": False, "confirm": False})
     assert r["step_id"] == "frigate_write" and r["errors"] == {"confirm": "confirm_required"}
@@ -70,7 +70,7 @@ async def test_write_shows_diff_requires_confirm_then_applies(hass, env):
     r = await hass.config_entries.options.async_configure(r["flow_id"], {})
     assert r["type"] == FlowResultType.CREATE_ENTRY
     assert "known_plates" in fake.raw and "width: 1920" not in fake.raw and "debug_save_plates: true" in fake.raw
-    assert entry.options["people_text"] == "Bonnie: NO860"  # options untouched
+    assert entry.options["people_text"] == "Alex: XO520"  # options untouched
     assert hass.states.get("sensor.plate_gate_driveway_frigate_status").state == "ok"
 
 

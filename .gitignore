@@ -10,3 +10,4 @@ models-dist/*.onnx
 companion/.venv/
 sandbox/media/frigate/clips/*.jpg
 sandbox/media/frigate/clips/*.webp
+.publish-private-terms

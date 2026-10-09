@@ -18,7 +18,7 @@ from custom_components.electrifix_plate_gate.plates import parse_people
 
 from .fake_frigate import FakeFrigate
 
-PEOPLE = parse_people("Bonnie: NO860")
+PEOPLE = parse_people("Alex: XO520")
 RAW = (
     "mqtt:\n  host: broker\n"
     "detectors:\n  ov:\n    type: openvino\n    device: CPU\n"
@@ -27,7 +27,7 @@ RAW = (
 )
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 5, "zones": [], "enabled": True, "dry_run": True,
 }
@@ -164,7 +164,7 @@ def test_i4_lpr_only_change_does_not_reindent_lists():
     ch = w.plan_change(OFFSET0, w.Desired(people=PEOPLE, camera="driveway"))
     assert "      - path: rtsp://a" in ch.new_yaml and "  - person" in ch.new_yaml
     changed = [ln for ln in ch.diff.splitlines() if ln.startswith(("+", "-")) and not ln.startswith(("+++", "---"))]
-    assert all("lpr" in ln or "enabled" in ln or "match_distance" in ln or "known_plates" in ln or "Bonnie" in ln or "N[" in ln for ln in changed), changed
+    assert all("lpr" in ln or "enabled" in ln or "match_distance" in ln or "known_plates" in ln or "Alex" in ln or "X[" in ln for ln in changed), changed
 
 
 # ---- I5: camera-level lpr override -------------------------------------------------

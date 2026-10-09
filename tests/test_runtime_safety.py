@@ -18,13 +18,13 @@ from custom_components.electrifix_plate_gate.const import DOMAIN
 
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 5, "zones": [], "enabled": True, "dry_run": False,
 }
 
 
-def payload(plate="NO ·860", event_id="e1", **kw):
+def payload(plate="XO ·520", event_id="e1", **kw):
     after = {
         "id": event_id, "camera": "driveway", "label": "car", "sub_label": None,
         "recognized_license_plate": plate, "recognized_license_plate_score": 0.95,
@@ -92,7 +92,7 @@ async def test_reload_keeps_cooldown_after_a_door_move(hass, mqtt, freezer):
     hass.states.async_set("cover.garage", "open")
     hass.states.async_set("cover.garage", "closed")  # the door moved just now, while HA was running
     await hass.async_block_till_done()
-    hass.config_entries.async_update_entry(entry, options={**entry.options, "people_text": "Bonnie: NO860, 1ABC123"})
+    hass.config_entries.async_update_entry(entry, options={**entry.options, "people_text": "Alex: XO520, 1ABC123"})
     await hass.async_block_till_done()
     async_fire_mqtt_message(hass, "frigate/events", payload())
     await hass.async_block_till_done()

@@ -5,7 +5,7 @@ No Home Assistant imports. Everything here is unit-tested without HA.
 Frigate (verified in v0.18.0) matches a known plate with
 ``re.match(f"^{pattern}$", raw_ocr_string)`` and does NOT normalise the OCR
 string first, so the patterns generated here tolerate the separators
-PaddleOCR emits (``NO ·860``) and the usual OCR confusions (O/0, I/1 ...).
+PaddleOCR emits (``XO ·520``) and the usual OCR confusions (O/0, I/1 ...).
 """
 from __future__ import annotations
 
@@ -53,7 +53,7 @@ def normalise(raw: str) -> str:
 
 
 def variant_pattern(plate: str) -> str:
-    """Regex tolerant of separators and OCR confusions, e.g. NO860 -> N[ .·•\\-]*[O0]..."""
+    """Regex tolerant of separators and OCR confusions, e.g. XO520 -> X[ .·•\\-]*[O0]..."""
     plain = normalise(plate)
     if not plain:
         raise ValueError("plate is empty after removing separators")

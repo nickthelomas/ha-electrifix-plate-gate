@@ -21,7 +21,7 @@ RAW = (
 )
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 5, "zones": [], "enabled": True, "dry_run": True,
 }

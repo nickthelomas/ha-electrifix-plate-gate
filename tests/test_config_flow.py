@@ -18,7 +18,7 @@ INFO = FrigateInfo(
     {"driveway": CameraInfo("driveway", 2304, 1296, ["driveway_approach"], False)},
 )
 INFO_PATH = "custom_components.electrifix_plate_gate.config_flow.FrigateClient.async_info"
-PLATES_OK = {"people_text": "Bonnie: NO860", "near_misses": "LO160", "match_distance": 0, "confirmed": True}
+PLATES_OK = {"people_text": "Alex: XO520", "near_misses": "LO120", "match_distance": 0, "confirmed": True}
 DEVICE_OK = {
     "device_entity": "cover.garage", "open_on_arrival": True, "close_on_leaving": True,
     "cooldown_seconds": 180, "require_moving": False, "auto_close_minutes": 5, "zones": [],
@@ -46,14 +46,14 @@ async def test_full_flow(hass):
     r = await _to_plates(hass)
     r = await hass.config_entries.flow.async_configure(
         r["flow_id"],
-        {"people_text": "Bonnie: NO860", "near_misses": "LO160, NO840", "match_distance": 1, "confirmed": False},
+        {"people_text": "Alex: XO520", "near_misses": "LO120, XO540", "match_distance": 1, "confirmed": False},
     )
     assert r["step_id"] == "plates" and r["errors"] == {"base": "confirm_verdicts"}
-    assert "NO840 would ALSO" in r["description_placeholders"]["verdicts"]
+    assert "XO540 would ALSO" in r["description_placeholders"]["verdicts"]
     # changing the values and ticking the box in one go re-shows the verdicts for the NEW values
     r = await hass.config_entries.flow.async_configure(r["flow_id"], PLATES_OK)
     assert r["step_id"] == "plates" and r["errors"] == {"base": "confirm_verdicts"}
-    assert "NO840" not in r["description_placeholders"]["verdicts"]
+    assert "XO540" not in r["description_placeholders"]["verdicts"]
     r = await hass.config_entries.flow.async_configure(r["flow_id"], PLATES_OK)
     assert r["step_id"] == "device"
     r = await hass.config_entries.flow.async_configure(r["flow_id"], DEVICE_OK)
@@ -66,7 +66,7 @@ async def test_full_flow(hass):
     assert r["title"] == "Plate Gate: driveway"
     assert r["data"] == {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
     assert r["options"]["dry_run"] is True and r["options"]["enabled"] is True
-    assert r["options"]["people_text"] == "Bonnie: NO860"
+    assert r["options"]["people_text"] == "Alex: XO520"
     assert r["options"]["device_entity"] == "cover.garage"
     assert r["options"]["cooldown_seconds"] == 180
 
@@ -81,7 +81,7 @@ async def test_url_prefilled_from_frigate_integration(hass):
 async def test_bad_plates_error(hass):
     r = await _to_plates(hass)
     r = await hass.config_entries.flow.async_configure(
-        r["flow_id"], {"people_text": "Bonnie", "near_misses": "", "match_distance": 0, "confirmed": True}
+        r["flow_id"], {"people_text": "Alex", "near_misses": "", "match_distance": 0, "confirmed": True}
     )
     assert r["step_id"] == "plates" and r["errors"] == {"people_text": "bad_plates"}
     assert "line 1" in r["description_placeholders"]["detail"]
@@ -132,7 +132,7 @@ async def test_options_flow_edits_plates_and_device(hass):
     assert r["type"] == FlowResultType.MENU
     r = await hass.config_entries.options.async_configure(r["flow_id"], {"next_step_id": "plates"})
     assert r["step_id"] == "plates"
-    new_plates = {**PLATES_OK, "people_text": "Bonnie: NO860\nSam: LO160"}
+    new_plates = {**PLATES_OK, "people_text": "Alex: XO520\nSam: LO120"}
     r = await hass.config_entries.options.async_configure(r["flow_id"], new_plates)
     assert r["step_id"] == "plates" and r["errors"] == {"base": "confirm_verdicts"}  # verdicts first
     with patch(INFO_PATH, return_value=INFO):
@@ -143,16 +143,16 @@ async def test_options_flow_edits_plates_and_device(hass):
     assert "Sam" in r["description_placeholders"]["yaml"]
     r = await hass.config_entries.options.async_configure(r["flow_id"], {})
     assert r["type"] == FlowResultType.CREATE_ENTRY
-    assert r["data"]["cooldown_seconds"] == 60 and r["data"]["people_text"] == "Bonnie: NO860\nSam: LO160"
+    assert r["data"]["cooldown_seconds"] == 60 and r["data"]["people_text"] == "Alex: XO520\nSam: LO120"
     assert r["data"]["dry_run"] is True  # untouched by the options flow
 
 
 async def test_confirm_only_counts_after_verdicts_were_shown(hass):
     r = await _to_plates(hass)
-    risky = {"people_text": "Bonnie: NO860", "near_misses": "NO840", "match_distance": 2, "confirmed": True}
+    risky = {"people_text": "Alex: XO520", "near_misses": "XO540", "match_distance": 2, "confirmed": True}
     r = await hass.config_entries.flow.async_configure(r["flow_id"], risky)
     assert r["step_id"] == "plates" and r["errors"] == {"base": "confirm_verdicts"}
-    assert "NO840 would ALSO" in r["description_placeholders"]["verdicts"]
+    assert "XO540 would ALSO" in r["description_placeholders"]["verdicts"]
     r = await hass.config_entries.flow.async_configure(r["flow_id"], risky)
     assert r["step_id"] == "device"
 

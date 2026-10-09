@@ -44,4 +44,4 @@ DEFAULT_DRY_RUN = True
 
 DEVICE_DOMAINS = ["cover", "switch", "script", "lock"]
 DEVICE_MOVE_WINDOW = 60  # seconds to wait for the device to change state after an action
-EXAMPLE_NEAR_MISSES = "LO160, NO840, MO860"
+EXAMPLE_NEAR_MISSES = "LO120, XO540, MO520"

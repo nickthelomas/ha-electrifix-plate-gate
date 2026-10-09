@@ -15,14 +15,14 @@ from custom_components.electrifix_plate_gate.const import DOMAIN
 
 DATA = {"url": "http://f:5000", "username": "", "password": "", "camera": "driveway", "topic_prefix": "frigate"}
 OPTS = {
-    "people_text": "Bonnie: NO860", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
+    "people_text": "Alex: XO520", "near_misses": "", "match_distance": 0, "device_entity": "cover.garage",
     "open_on_arrival": True, "close_on_leaving": True, "cooldown_seconds": 180, "require_moving": False,
     "auto_close_minutes": 0, "zones": [], "enabled": True, "dry_run": True,
 }
 E = "plate_gate_driveway"
 
 
-def payload(plate="NO ·860"):
+def payload(plate="XO ·520"):
     after = {
         "id": "e1", "camera": "driveway", "label": "car", "sub_label": None,
         "recognized_license_plate": plate, "recognized_license_plate_score": 0.95,
@@ -83,17 +83,17 @@ async def test_test_button_never_actuates_even_with_dry_run_off(hass, setup_dry)
     await hass.async_block_till_done()
     assert opens == []
     assert hass.states.get(f"sensor.{E}_last_action").state == "would_open"
-    assert hass.states.get(f"sensor.{E}_last_plate").state == "NO860"
-    assert hass.states.get(f"sensor.{E}_last_plate").attributes["person"] == "Bonnie"
+    assert hass.states.get(f"sensor.{E}_last_plate").state == "XO520"
+    assert hass.states.get(f"sensor.{E}_last_plate").attributes["person"] == "Alex"
 
 
 async def test_sensors_follow_runtime(hass, setup_dry):
     async_fire_mqtt_message(hass, "frigate/events", payload())
     await hass.async_block_till_done()
     plate = hass.states.get(f"sensor.{E}_last_plate")
-    assert plate.state == "NO860" and plate.attributes["raw"] == "NO ·860" and plate.attributes["event_id"] == "e1"
+    assert plate.state == "XO520" and plate.attributes["raw"] == "XO ·520" and plate.attributes["event_id"] == "e1"
     action = hass.states.get(f"sensor.{E}_last_action")
-    assert action.state == "would_open" and action.attributes["reason"] == "dry_run" and action.attributes["person"] == "Bonnie"
+    assert action.state == "would_open" and action.attributes["reason"] == "dry_run" and action.attributes["person"] == "Alex"
     timing = hass.states.get(f"sensor.{E}_timing")
     assert float(timing.state) >= 3.0 and timing.attributes["unit_of_measurement"] == "s"
     assert timing.attributes["plate_delay"] is not None and timing.attributes["device_moved_at"] is None

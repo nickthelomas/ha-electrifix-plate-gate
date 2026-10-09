@@ -8,7 +8,7 @@ Nothing here talks to a real house.
 cd sandbox
 docker compose up -d          # first run pulls the Home Assistant image
 ./run_check.sh                # onboards HA, adds MQTT + Plate Gate via the setup-flow API, then:
-                              #  1) dry run on  → publish NO ·860 → last_action = would_open
+                              #  1) dry run on  → publish XO ·520 → last_action = would_open
                               #  2) dry run off → publish       → the fake garage opens
                               #  3) cooldown 180 → publish      → skipped / cooldown
                               #  4) test button                 → garage does not move
