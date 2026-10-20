@@ -1,0 +1,23 @@
+default_config:
+
+logger:
+  default: warning
+  logs:
+    custom_components.electrifix_plate_gate: debug
+
+input_boolean:
+  sandbox_garage_open:
+    name: Sandbox garage open
+
+template:
+  - cover:
+      - name: "Sandbox garage"
+        unique_id: sandbox_garage
+        device_class: garage
+        state: "{{ is_state('input_boolean.sandbox_garage_open', 'on') }}"
+        open_cover:
+          - action: input_boolean.turn_on
+            target: {entity_id: input_boolean.sandbox_garage_open}
+        close_cover:
+          - action: input_boolean.turn_off
+            target: {entity_id: input_boolean.sandbox_garage_open}

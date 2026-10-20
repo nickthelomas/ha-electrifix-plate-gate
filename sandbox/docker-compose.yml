@@ -1,0 +1,40 @@
+# Local sandbox: throwaway Home Assistant + Mosquitto + a fake Frigate API + a fake garage.
+# Nothing here touches a real house. Bind to localhost only.
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    ports: ["127.0.0.1:1883:1883"]
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+      - ./frigate/sample_event.json:/sample/sample_event.json:ro
+  frigate:
+    image: python:3.12-alpine
+    command: ["sh", "-c", "pip install -q pyyaml && python3 /app/fake_frigate.py"]
+    volumes:
+      - ./frigate:/app:ro
+      - ../models-dist:/models-dist:ro     # served at /models/<file> so the companion can "download" them locally
+    ports: ["127.0.0.1:5005:5000"]
+  companion:
+    build:
+      context: ../companion
+      dockerfile: docker/Dockerfile
+    depends_on: [mosquitto]
+    environment:
+      PG_MQTT_HOST: mosquitto
+      PG_COMPANION_ID: sandbox-box
+      PG_ALLOWED_BASES: http://frigate:5000/models/
+    volumes:
+      - frigate_config:/frigate_config
+      - ./media/frigate:/media/frigate:ro
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    depends_on: [mosquitto, frigate]
+    ports: ["127.0.0.1:8123:8123"]
+    volumes:
+      - ./ha-config:/config
+      - ../custom_components/electrifix_plate_gate:/config/custom_components/electrifix_plate_gate:ro
+    environment:
+      TZ: Australia/Perth
+
+volumes:
+  frigate_config:
