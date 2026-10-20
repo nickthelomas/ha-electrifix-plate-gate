@@ -45,11 +45,12 @@ should decide how much you trust it:
 ### With HACS (recommended)
 
 1. In Home Assistant, open **HACS**.
-2. Open the menu (top right) and choose **Custom repositories**.
-3. Paste `https://github.com/nickthelomas/ha-electrifix-plate-gate`, choose category
-   **Integration**, and select **Add**.
-4. Find **ElectriFix Plate Gate** in the list and select **Download**.
-5. **Restart Home Assistant** when it asks you to.
+2. Search for **ElectriFix Plate Gate** and select **Download**.
+3. **Restart Home Assistant** when it asks you to.
+
+Not in the list yet? Until it is in the HACS default catalogue, add it by hand first: HACS menu
+(top right) → **Custom repositories** → paste `https://github.com/nickthelomas/ha-electrifix-plate-gate`,
+category **Integration**, **Add**. Then search as above.
 
 ### Without HACS
 

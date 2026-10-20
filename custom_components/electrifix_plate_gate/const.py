@@ -2,7 +2,6 @@
 
 DOMAIN = "electrifix_plate_gate"
 NAME = "ElectriFix Plate Gate"
-HELP_URL = "https://fix.electrifixperth.com.au"
 
 CONF_URL = "url"
 CONF_USERNAME = "username"

@@ -5,11 +5,12 @@ import asyncio
 import time
 from typing import Any
 
+import aiohttp
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import selector
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .const import (
     CONF_AUTO_CLOSE,
@@ -45,7 +46,6 @@ from .const import (
     DEVICE_DOMAINS,
     DOMAIN,
     EXAMPLE_NEAR_MISSES,
-    HELP_URL,
     REPEAT_MODES,
 )
 from . import backups
@@ -152,7 +152,6 @@ def _yaml_placeholders(people_text: str, camera: str, detect: str) -> dict[str, 
         "yaml": frigate_lpr_yaml(parse_people(people_text)),
         "camera": camera,
         "detect": detect,
-        "help_url": HELP_URL,  # hassfest: URLs go in placeholders, never in the translation text
     }
 
 
@@ -191,7 +190,13 @@ class _PlateStepsMixin:
 
 
 async def _fetch_info(hass: HomeAssistant, url: str, username: str, password: str) -> FrigateInfo:
-    return await FrigateClient(async_get_clientsession(hass), url, username, password).async_info()
+    # A short-lived session of our own, so Frigate's login cookie never lands in HA's shared jar.
+    # unsafe=True: Frigate is usually reached by IP address, and aiohttp's default jar drops those cookies.
+    session = async_create_clientsession(hass, auto_cleanup=False, cookie_jar=aiohttp.CookieJar(unsafe=True))
+    try:
+        return await FrigateClient(session, url, username, password).async_info()
+    finally:
+        session.detach()  # never close(): it would close HA's shared connector
 
 
 def _camera_lines(info: FrigateInfo) -> str:

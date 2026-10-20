@@ -9,11 +9,12 @@ import time
 from collections.abc import Callable
 from typing import Any
 
+import aiohttp
 from homeassistant.components import mqtt
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EVENT_HOMEASSISTANT_STARTED, EVENT_HOMEASSISTANT_STOP
 from homeassistant.core import CoreState, Event, HomeAssistant, callback
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.aiohttp_client import async_create_clientsession
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.event import async_call_later, async_track_state_change_event
 
@@ -140,9 +141,12 @@ class PlateGateRuntime:
         self.accuracy: dict | None = None
         self.accuracy_ran_at: float | None = None
         self.hardware_recs: list = []
+        # This entry's own session (detached when the entry unloads): Frigate's login cookie stays out of
+        # HA's shared jar, and two entries with different Frigate users can't overwrite each other's login.
+        session = async_create_clientsession(hass, cookie_jar=aiohttp.CookieJar(unsafe=True))
         self.ops = FrigateOps(
             hass, entry,
-            FrigateClient(async_get_clientsession(hass), entry.data[CONF_URL], entry.data.get(CONF_USERNAME), entry.data.get(CONF_PASSWORD)),
+            FrigateClient(session, entry.data[CONF_URL], entry.data.get(CONF_USERNAME), entry.data.get(CONF_PASSWORD)),
             self.camera, notify=self._notify,
         )
 
