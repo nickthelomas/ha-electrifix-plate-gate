@@ -42,17 +42,16 @@ should decide how much you trust it:
 
 ## Installing it
 
-### With HACS (recommended)
+### From the Marketplace (recommended)
 
-1. In Home Assistant, open **HACS**.
-2. Search for **ElectriFix Plate Gate** and select **Download**.
+Plate Gate is in the default catalogue of the Home Assistant **Marketplace** (called **HACS** before
+Home Assistant 2026.11), so there is nothing to add by hand.
+
+1. In Home Assistant, open the **Marketplace** (**HACS** on older versions).
+2. Search for **ElectriFix Plate Gate** and install it (the button says **Download** in HACS).
 3. **Restart Home Assistant** when it asks you to.
 
-Not in the list yet? Until it is in the HACS default catalogue, add it by hand first: HACS menu
-(top right) → **Custom repositories** → paste `https://github.com/nickthelomas/ha-electrifix-plate-gate`,
-category **Integration**, **Add**. Then search as above.
-
-### Without HACS
+### By hand
 
 Copy the `custom_components/electrifix_plate_gate` folder from this repository into your
 Home Assistant `config` folder, so you end up with
